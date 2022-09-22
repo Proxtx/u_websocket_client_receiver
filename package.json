@@ -1,0 +1,25 @@
+{
+  "name": "u_websocket_client_receiver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Proxtx/u_websocket_client_receiver.git"
+  },
+  "author": "Proxtx",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Proxtx/u_websocket_client_receiver/issues"
+  },
+  "homepage": "https://github.com/Proxtx/u_websocket_client_receiver#readme",
+  "dependencies": {
+    "@proxtx/combine": "^3.1.4",
+    "@proxtx/combine-rest": "^1.0.4",
+    "@proxtx/config": "^1.0.2"
+  }
+}
