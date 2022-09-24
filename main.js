@@ -11,6 +11,7 @@ const bundler = await genCombine(
 export let transmitters = [];
 
 const generateTransmitters = async () => {
+  transmitters.length = 0;
   let ids = (await bundler.listClients()).clients;
   for (let id of ids) {
     transmitters.push(new Transmitter(id));
@@ -27,4 +28,11 @@ class Transmitter {
   }
 }
 
-await generateTransmitters();
+const transmitterLoop = async () => {
+  await generateTransmitters();
+  setTimeout(() => {
+    transmitterLoop();
+  }, 60000);
+};
+
+await transmitterLoop();
