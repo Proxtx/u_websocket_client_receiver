@@ -12,10 +12,12 @@ export let transmitters = [];
 
 const generateTransmitters = async () => {
   transmitters.length = 0;
-  let ids = (await bundler.listClients()).clients;
-  for (let id of ids) {
-    transmitters.push(new Transmitter(id));
-  }
+  try {
+    let ids = (await bundler.listClients()).clients;
+    for (let id of ids) {
+      transmitters.push(new Transmitter(id));
+    }
+  } catch {}
 };
 
 class Transmitter {
