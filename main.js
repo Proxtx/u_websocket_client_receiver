@@ -1,40 +1,41 @@
 import { genModule } from "@proxtx/combine/combine.js";
 import { genCombine } from "@proxtx/combine-rest/request.js";
-import config from "@proxtx/config";
 
-const bundler = await genCombine(
-  config.u_websocket_client_receiver.bundlerUrl + "/api/",
-  "bundler",
-  genModule
-);
+export class Receiver {
+  constructor(config) {
+    this.config = config;
 
-export let transmitters = [];
-
-const generateTransmitters = async () => {
-  transmitters.length = 0;
-  try {
-    let ids = (await bundler.listClients()).clients;
-    for (let id of ids) {
-      transmitters.push(new Transmitter(id));
-    }
-  } catch {}
-};
-
-class Transmitter {
-  constructor(id) {
-    this.id = id;
+    (async () => {
+      this.api = await genCombine(
+        this.config.bundlerUrl + "/api/",
+        "bundler",
+        genModule
+      );
+    })();
   }
 
-  async request(data) {
-    return (await bundler.request(this.id, data)).result;
+  async getTransmitters() {
+    let transmitters = [];
+    try {
+      let ids = (await this.api.listClients()).clients;
+      for (let id of ids) {
+        transmitters.push(new Transmitter(id, this.api));
+      }
+    } catch (e) {
+      console.log("Error while fetching WS clients:", e);
+    }
+
+    return transmitters;
   }
 }
 
-const transmitterLoop = async () => {
-  await generateTransmitters();
-  setTimeout(() => {
-    transmitterLoop();
-  }, 60000);
-};
+class Transmitter {
+  constructor(id, api) {
+    this.id = id;
+    this.api = api;
+  }
 
-await transmitterLoop();
+  async request(data) {
+    return (await this.api.request(this.id, data)).result;
+  }
+}
