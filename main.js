@@ -16,6 +16,9 @@ export class Receiver {
 
   async getTransmitters() {
     let transmitters = [];
+
+    while (!this.api) await new Promise((r) => setTimeout(r, 10));
+
     try {
       let ids = (await this.api.listClients()).clients;
       for (let id of ids) {
